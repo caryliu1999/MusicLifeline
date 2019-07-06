@@ -67,10 +67,18 @@ quick_gen_project_*_autogen.sh.meta
 .vscode/
 /libs
 
-profiles/packages/assets\.json
+profiles/packages/assets.json
 
-profiles/packages/engine\.json
+profiles/packages/engine.json
 
-profiles/packages/hierarchy\.json
+profiles/packages/hierarchy.json
 
-profiles/packages/scene\.json
+profiles/packages/scene.json
+
+#//////////////////////////
+# Project specific
+#//////////////////////////
+**/node_modules
+
+BeatDetector/graph.svg
+BeatDetector/data.js

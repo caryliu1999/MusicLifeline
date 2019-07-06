@@ -1,0 +1,9 @@
+{
+  "name": "beat-detector",
+  "version": "1.0.0",
+  "dependencies": {
+    "create-music-stream": "^1.0.0",
+    "music-beat-detector": "^0.1.1",
+    "speaker": "^0.4.1"
+  }
+}
