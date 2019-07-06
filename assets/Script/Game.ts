@@ -8,10 +8,11 @@
 //  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
 
-import { _decorator, Component, EventTouch, CameraComponent, SphereColliderComponent, utils, ModelComponent} from "Cocos3D";
+import { _decorator, Component, EventTouch, CameraComponent, SphereColliderComponent} from "Cocos3D";
 import { MusicManager } from "./MusicManager";
+import { ModelType } from "./Enums";
 
-const { intersect , ray} = cc.geometry;
+const { intersect } = cc.geometry;
 const { vec3 } = cc.vmath;
 const { ccclass, property } = _decorator;
 
@@ -34,17 +35,22 @@ export class Game extends Component {
 
     _touch = false;
 
+    //_modelType = ModelType.SPHERE;
+    _modelType = null;
+
     onLoad () {
         // mouse events included
         cc.systemEvent.on(cc.SystemEvent.EventType.TOUCH_START, this.onTouchBegin, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.TOUCH_MOVE, this.onTouchMove, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.TOUCH_END, this.onTouchEnd, this);
+
+        cc.director._physicsSystem.enabled = true;
 	}
 
 	onDestroy () {
         cc.systemEvent.off(cc.SystemEvent.EventType.TOUCH_START, this.onTouchBegin, this);
         cc.systemEvent.off(cc.SystemEvent.EventType.TOUCH_MOVE, this.onTouchMove, this);
-		cc.systemEvent.off(cc.SystemEvent.EventType.TOUCH_END, this.onTouchEnd, this);
+        cc.systemEvent.off(cc.SystemEvent.EventType.TOUCH_END, this.onTouchEnd, this);
     }
     
 
@@ -59,7 +65,6 @@ export class Game extends Component {
 	}
 
 	onTouchMove (e) {
-		// ENGINE-TEAM: no clean public way to prevent object allocation (#470)
         const curX = e.getLocationX(), curY = e.getLocationY();
         let touchPos = this.mainCamera.screenToWorld(vec3.create(curX, curY, 0)) 
         if (this._touch) {
@@ -73,6 +78,11 @@ export class Game extends Component {
     }
     
     onStart () {
+        // game start
         this.musicMgr.play();
+    }
+
+    dispatchMessage (id, time) {
+        this.musicMgr.recordMsg(id, time);
     }
 }

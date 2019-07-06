@@ -1,0 +1,15 @@
+{
+  "ver": "1.0.802",
+  "importer": "typescript",
+  "imported": true,
+  "uuid": "905cc08f-ccdb-4652-9cf8-eec7cdc7c384",
+  "displayName": "",
+  "files": [
+    ".js"
+  ],
+  "subMetas": {},
+  "userData": {
+    "moduleId": "project:///assets/Script/Enums.ts",
+    "importAsPlugin": false
+  }
+}
