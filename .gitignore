@@ -80,5 +80,5 @@ profiles/packages/scene.json
 #//////////////////////////
 **/node_modules
 
-BeatDetector/graph.svg
-BeatDetector/data.js
+beat-detector/graph.svg
+beat-detector/data.js

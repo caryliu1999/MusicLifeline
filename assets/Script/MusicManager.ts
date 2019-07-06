@@ -107,7 +107,7 @@ export class MusicManager extends Component {
 
         for (let i = 0; i < this.actorNum; i++) {
             //this.emission(i, this.isMatch(i));
-            this.recordMsg(i, 0);
+            //this.recordMsg(i, 0);
         }
     }
 
