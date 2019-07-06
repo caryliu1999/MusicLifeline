@@ -4,7 +4,7 @@
   "_objFlags": 0,
   "_native": "",
   "_effectAsset": {
-    "__uuid__": "ac5a2a46-0485-4166-875f-bba68925c1bb"
+    "__uuid__": "e9759772-da49-4691-b8a2-3bd8438b7788"
   },
   "_techIdx": 0,
   "_defines": [
@@ -14,33 +14,19 @@
     {
       "blendState": {
         "targets": [
-          {
-            "blend": true,
-            "blendDst": 4,
-            "blendDstAlpha": 4,
-            "blendSrc": 2
-          }
+          {}
         ]
       },
-      "depthStencilState": {
-        "depthWrite": false
-      },
+      "depthStencilState": {},
       "rasterizerState": {}
     }
   ],
   "_props": [
     {
-      "saturation": 0.7,
-      "value": 0.2,
       "meshScale": {
         "__type__": "cc.Vec2",
         "x": 2,
         "y": 1
-      },
-      "speed": {
-        "__type__": "cc.Vec2",
-        "x": 10,
-        "y": 0
       }
     }
   ]
