@@ -1,0 +1,10 @@
+{
+  "name": "websocket-chat",
+  "version": "1.0.0",
+  "description": "A simple WebSocket-based chat server.",
+  "dependencies": {
+    "clap-detector": "^0.5.1",
+    "node-kcp": "^1.0.10",
+    "websocket": "^1.0.28"
+  }
+}

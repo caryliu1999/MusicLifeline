@@ -1,0 +1,96 @@
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: triangle-vs:vert
+      frag: triangle-fs:frag
+      rasterizerState:
+        cullMode: none
+      depthStencilState:
+        depthTest: true
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendDstAlpha: one_minus_src_alpha
+      properties:
+        color: { inspector: { type: color } }
+        intensitySize: {}
+}%
+
+CCProgram ubo %{
+  uniform Constant {
+    vec4 color;
+    vec4 intensitySize; // x: intensity, y: glow
+  };
+}%
+
+CCProgram triangle-vs %{
+  precision mediump float;
+  #include <cc-local>
+  #include <cc-global>
+  #include <input>
+  #include <common>
+  #include <gamma>
+  #include <ubo>
+
+  in vec2 a_texCoord;
+  out vec3 v_color;
+  out vec2 v_uv;
+
+  vec4 vert () {
+    vec3 position;
+    CCVertInput(position);
+
+    v_color = color.rgb * intensitySize.x * 100.0;
+    #if CC_USE_HDR
+      v_color *= FP_SCALE;
+    #else
+      v_color = LinearToSRGB(v_color * cc_exposure.x);
+    #endif
+    v_uv = a_texCoord;
+    return cc_matViewProj * cc_matWorld * vec4(position, 1.0);
+  }
+}%
+
+CCProgram triangle-fs %{
+  precision mediump float;
+  #include <cc-global>
+  #include <output>
+  #include <ubo>
+
+  in vec3 v_color;
+  in vec2 v_uv;
+
+  float triangle(in vec2 p0, in vec2 p1, in vec2 p2, in vec2 p) {
+    vec2 e0 = p1 - p0;
+    vec2 e1 = p2 - p1;
+    vec2 e2 = p0 - p2;
+
+    vec2 v0 = p - p0;
+    vec2 v1 = p - p1;
+    vec2 v2 = p - p2;
+
+    vec2 pq0 = v0 - e0 * clamp(dot(v0, e0) / dot(e0, e0), 0.0, 1.0);
+    vec2 pq1 = v1 - e1 * clamp(dot(v1, e1) / dot(e1, e1), 0.0, 1.0);
+    vec2 pq2 = v2 - e2 * clamp(dot(v2, e2) / dot(e2, e2), 0.0, 1.0);
+
+    float s = sign(e0.x * e2.y - e0.y * e2.x);
+    vec2 d = min(min(
+      vec2(dot(pq0, pq0), s * (v0.x * e0.y - v0.y * e0.x)),
+      vec2(dot(pq1, pq1), s * (v1.x * e1.y - v1.y * e1.x))),
+      vec2(dot(pq2, pq2), s * (v2.x * e2.y - v2.y * e2.x)));
+
+    return -sqrt(d.x) * sign(d.y);
+  }
+
+  vec4 frag () {
+    const vec2 v1 = vec2( 0.0, -0.25);
+    const vec2 v2 = vec2(-0.25, 0.25);
+    const vec2 v3 = vec2( 0.25, 0.25);
+    float d = triangle(v1, v2, v3, v_uv - 0.5);
+
+    return CCFragOutput(vec4(v_color, mix(0.7 - d * 14.0, 1.0, d < 0.0 ? 1.0 : 0.0)));
+  }
+}%
