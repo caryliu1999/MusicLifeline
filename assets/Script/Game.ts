@@ -30,6 +30,9 @@ export class Game extends Component {
     @property(SphereColliderComponent)
     collider = null;
 
+    @property(cc.Node)
+    startNode = null;
+
     @property(MusicManager)
     musicMgr = null;
 
@@ -78,8 +81,19 @@ export class Game extends Component {
     }
     
     onStart () {
+        const serverUrl = 'ws://127.0.0.1:8080';
+		const connection = new WebSocket(serverUrl);
+		connection.onmessage = () => {
+			// clap
+            console.log('clap');
+            this.dispatchMessage(Math.floor(Math.random() * 4), 0);
+		};
+		
+		connection.onopen = () => {
+            this.startNode.active = false;
+			this.musicMgr.play();
+		}
         // game start
-        this.musicMgr.play();
     }
 
     dispatchMessage (id, time) {
