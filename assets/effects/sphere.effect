@@ -1,0 +1,75 @@
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: sphere-vs:vert
+      frag: sphere-fs:frag
+      rasterizerState:
+        cullMode: none
+      depthStencilState:
+        depthTest: true
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendDstAlpha: one_minus_src_alpha
+      properties:
+        color: { inspector: { type: color } }
+        intensitySize: {}
+}%
+
+CCProgram ubo %{
+  uniform Constant {
+    vec4 color;
+    vec4 intensitySize; // x: intensity, y: glow
+  };
+}%
+
+CCProgram sphere-vs %{
+  precision mediump float;
+  #include <cc-local>
+  #include <cc-global>
+  #include <input>
+  #include <common>
+  #include <gamma>
+  #include <ubo>
+
+  in vec2 a_texCoord;
+  out vec3 v_color;
+  out vec2 v_uv;
+
+  vec4 vert () {
+    vec3 position;
+    CCVertInput(position);
+
+    v_color = color.rgb * intensitySize.x * 100.0;
+    #if CC_USE_HDR
+      v_color *= FP_SCALE;
+    #else
+      v_color = LinearToSRGB(v_color * cc_exposure.x);
+    #endif
+    v_uv = a_texCoord;
+    return cc_matViewProj * cc_matWorld * vec4(position, 1.0);
+  }
+}%
+
+CCProgram sphere-fs %{
+  precision mediump float;
+  #include <output>
+  #include <ubo>
+
+  in vec3 v_color;
+  in vec2 v_uv;
+
+  float sphere(vec3 d, vec3 p) {
+    return smoothstep(1.0 - intensitySize.y, 1.0, 1.0 / length(cross(d, p)));
+  }
+
+  vec4 frag () {
+    vec2 uv = v_uv - 0.5;
+    vec3 R = normalize(vec3(1.0, uv));
+    return CCFragOutput(vec4(v_color,
+      mix(sphere(R, vec3(5.0, 0.0, 0.0)), 1.0, dot(uv, uv) < 0.0625 ? 1.0 : 0.0)));
+  }
+}%
