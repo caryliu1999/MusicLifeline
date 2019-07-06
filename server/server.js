@@ -21,7 +21,7 @@ var clients = {};
 var interval = 25;
 
 var connectionArray = [];
-var nextID = Date.now();
+var id = 0;
 
 var httpServer = http.createServer(function(request, response) {
     var mime = {
@@ -158,10 +158,13 @@ server.on('listening', () => {
         for (var k in clients) {
             var kcpobj = clients[k];
         	kcpobj.update(Date.now());
-        	var recv = kcpobj.recv();
-        	if (recv) {
+            var recv = kcpobj.recv();
+            if (recv === 'hand shake') {
+                kcpobj.send(id++);
+            }
+        	else {
             	console.log(`server recv ${recv} from ${kcpobj.context().address}:${kcpobj.context().port}`);
-           		connectionArray.forEach(val => val.sendUTF(''));
+           		connectionArray.forEach(val => val.sendUTF(recv));
        	 	}
        	}
     }, interval);

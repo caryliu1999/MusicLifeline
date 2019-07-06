@@ -17,6 +17,7 @@ var WebSocketServer = require('websocket').server;
 
 var connectionArray = [];
 var nextID = Date.now();
+var thisId = 0;
 
 var httpServer = http.createServer(function(request, response) {
     var mime = {
@@ -121,7 +122,7 @@ httpServer.listen(8080, function() {
 });
 
 var kcp = require('node-kcp');
-var kcpobj = new kcp.KCP(123, {address: '10.44.24.118', port: 41234});
+var kcpobj = new kcp.KCP(123, {address: '10.44.63.17', port: 41234});
 var dgram = require('dgram');
 var client = dgram.createSocket('udp4');
 var msg = 'hello world';
@@ -143,6 +144,7 @@ client.on('message', (msg, rinfo) => {
     kcpobj.input(msg);
 });
 
+kcpobj.send('hand shake');
 // Create the WebSocket server
 
 // console.log("***CREATING WEBSOCKET SERVER");
@@ -189,8 +191,11 @@ wsServer.on('request', function(request) {
           // handle it appropriately.
           console.log(Date.now());
           kcpobj.update(Date.now());
-          // var recv = kcpobj.recv();
-          kcpobj.send(msg+(idx++));
+          var recv = kcpobj.recv();
+          if (recv) {
+            thisId = recv;
+          }
+          kcpobj.send(thisId);
           // Convert the message back to JSON and send it out
           // to all clients
       }
