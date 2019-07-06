@@ -50,10 +50,12 @@ export class Energy extends Component {
     
     onCollisionEnter (e) {
         let target: Actor = e.otherCollider.node.getComponent(Actor);
-        if (target.modelType == this.modelType) {
-            this.playPerfect();
-        } else {
-            this.playFail();
+        if (target) {
+            if (target.modelType == this.modelType) {
+                this.playPerfect();
+            } else {
+                this.playFail();
+            }
         }
     }
 
