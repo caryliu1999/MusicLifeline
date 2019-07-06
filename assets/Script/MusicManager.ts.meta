@@ -1,0 +1,15 @@
+{
+  "ver": "1.0.802",
+  "importer": "typescript",
+  "imported": true,
+  "uuid": "82aa7d19-6297-4ae1-993c-8220a9178b17",
+  "displayName": "",
+  "files": [
+    ".js"
+  ],
+  "subMetas": {},
+  "userData": {
+    "moduleId": "project:///assets/Script/MusicManager.ts",
+    "importAsPlugin": false
+  }
+}

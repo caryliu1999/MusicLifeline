@@ -1,0 +1,55 @@
+{
+  "ver": "1.0.14",
+  "importer": "image",
+  "imported": true,
+  "uuid": "1e457963-d8d4-4ac2-a437-618cd4927fce",
+  "displayName": "",
+  "files": [
+    ".png",
+    ".json"
+  ],
+  "subMetas": {
+    "spriteFrame": {
+      "ver": "1.0.2",
+      "importer": "sprite-frame",
+      "uuid": "1e457963-d8d4-4ac2-a437-618cd4927fce@spriteFrame",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {},
+      "userData": {
+        "wrapModeS": "repeat",
+        "wrapModeT": "repeat",
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "none",
+        "premultiplyAlpha": false,
+        "anisotropy": 1,
+        "trimType": "auto",
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 0,
+        "offsetY": 0,
+        "trimX": 0,
+        "trimY": 0,
+        "width": 31,
+        "height": 402,
+        "rawWidth": 31,
+        "rawHeight": 402,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "1e457963-d8d4-4ac2-a437-618cd4927fce",
+        "atlasUuid": ""
+      },
+      "displayName": "filled_v_fg"
+    }
+  },
+  "userData": {
+    "type": "sprite-frame",
+    "redirect": "1e457963-d8d4-4ac2-a437-618cd4927fce@spriteFrame"
+  }
+}

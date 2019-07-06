@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "es6",
+    "types": [
+      "/Applications/CocosCreator3D-v1.0.0-beta2-darwin-070517.app/Contents/Resources/resources/3d/engine/bin/.declarations/Cocos3D"
+    ],
+    "experimentalDecorators": true
+  }
+}

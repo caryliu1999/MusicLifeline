@@ -1,0 +1,33 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "base": {
+      "base": "2,2,0,0,0,0,16,1",
+      "mipmaps": [
+        "24a704da-2867-446d-8d1a-5e920c75e09d"
+      ]
+    },
+    "name": "sprite-frame",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      30,
+      15
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      30,
+      15
+    ],
+    "capInsets": [
+      10,
+      4,
+      10,
+      4
+    ]
+  }
+}

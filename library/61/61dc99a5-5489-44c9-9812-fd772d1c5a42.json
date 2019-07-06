@@ -1,0 +1,101 @@
+{
+  "__type__": "cc.EffectAsset",
+  "_name": "builtin-skybox",
+  "_objFlags": 0,
+  "_native": "",
+  "techniques": [
+    {
+      "passes": [
+        {
+          "rasterizerState": {
+            "cullMode": 0
+          },
+          "program": "builtin-skybox|sky-vs:vert|sky-fs:frag",
+          "priority": 245,
+          "depthStencilState": {
+            "depthTest": true,
+            "depthWrite": false
+          }
+        }
+      ]
+    }
+  ],
+  "shaders": [
+    {
+      "hash": 2763126592,
+      "glsl3": {
+        "vert": "\nprecision mediump float;\nuniform CCGlobal {\n  vec4 cc_time;\n\n  vec4 cc_screenSize;\n\n  vec4 cc_screenScale;\n\n  vec4 cc_nativeSize;\n\n  mat4 cc_matView;\n  mat4 cc_matViewInv;\n  mat4 cc_matProj;\n  mat4 cc_matProjInv;\n  mat4 cc_matViewProj;\n  mat4 cc_matViewProjInv;\n  vec4 cc_cameraPos;\n\n  vec4 cc_exposure;\n\n  vec4 cc_mainLitDir;\n\n  vec4 cc_mainLitColor;\n\n  vec4 cc_ambientSky;\n  vec4 cc_ambientGround;\n};\n\nin vec3 a_position;\n\nvoid CCDecode (out vec3 position) {\n  position = a_position;\n}\n\n#if CC_USE_SKINNING\n\nstruct StandardAttributes {\n  vec3 position;\n  vec3 normal;\n  vec4 tangent;\n};\n\nin vec4 a_weights;\nin vec4 a_joints;\n\n#if CC_USE_SKINNING == 1\n  uniform CCSkinning {\n    vec4 cc_jointsData[30 * 3];\n  };\n#else\n  uniform CCSkinningTexture {\n    vec4 cc_jointsTextureSizeInv;\n  };\n  uniform sampler2D cc_jointsTexture;\n#endif\n\n#if CC_USE_SKINNING == 2\n  float decode32(highp vec4 rgba) {\n    rgba = rgba * 255.0;\n\n    float Sign = 1.0 - step(128.0, rgba[3]) * 2.0;\n    float Exponent = 2.0 * mod(rgba[3], 128.0) + step(128.0, rgba[2]) - 127.0;\n    float Mantissa = mod(rgba[2], 128.0) * 65536.0 + rgba[1] * 256.0 + rgba[0] + 8388608.0;\n    return Sign * exp2(Exponent - 23.0) * Mantissa;\n  }\n#endif\n\n#if CC_USE_SKINNING == 1\n  vec3 getJointDQ(float i, out vec4 Qr, out vec4 Qt) {\n    int idx = 3 * int(i);\n    Qr = cc_jointsData[idx];\n    Qt = cc_jointsData[idx + 1];\n    return cc_jointsData[idx + 2].xyz;\n  }\n#elif CC_USE_SKINNING == 2\n  vec3 getJointDQ(float i, out vec4 Qr, out vec4 Qt) {\n    float y = (i + 0.5) * cc_jointsTextureSizeInv.y;\n    Qr = vec4(\n      decode32(texture(cc_jointsTexture, vec2((0.5 / 12.0), y))),\n      decode32(texture(cc_jointsTexture, vec2((1.5 / 12.0), y))),\n      decode32(texture(cc_jointsTexture, vec2((2.5 / 12.0), y))),\n      decode32(texture(cc_jointsTexture, vec2((3.5 / 12.0), y)))\n    );\n    Qt = vec4(\n      decode32(texture(cc_jointsTexture, vec2((4.5 / 12.0), y))),\n      decode32(texture(cc_jointsTexture, vec2((5.5 / 12.0), y))),\n      decode32(texture(cc_jointsTexture, vec2((6.5 / 12.0), y))),\n      decode32(texture(cc_jointsTexture, vec2((7.5 / 12.0), y)))\n    );\n    return vec3(\n      decode32(texture(cc_jointsTexture, vec2((8.5 / 12.0), y))),\n      decode32(texture(cc_jointsTexture, vec2((9.5 / 12.0), y))),\n      decode32(texture(cc_jointsTexture, vec2((10.5 / 12.0), y)))\n    );\n  }\n#elif CC_USE_SKINNING == 3\n  vec3 getJointDQ(float i, out vec4 Qr, out vec4 Qt) {\n    float y = (i + 0.5) * cc_jointsTextureSizeInv.y;\n    Qr = texture(cc_jointsTexture, vec2((0.5 / 3.0), y));\n    Qt = texture(cc_jointsTexture, vec2((1.5 / 3.0), y));\n    return texture(cc_jointsTexture, vec2((2.5 / 3.0), y)).xyz;\n  }\n#endif\n\nvoid skinRTS(out vec4 R, out vec3 T, out vec3 S) {\n  vec4 r, t, Qt = vec4(0.0);\n  R = vec4(0.0); S = vec3(0.0);\n\n  for (int i = 0; i < 4; i++) {\n    float w = a_weights[i];\n    S += getJointDQ(a_joints[i], r, t) * w;\n    R += r * w; Qt += t * w;\n  }\n\n  float invNorm = 1.0 / length(R); R *= invNorm; Qt *= invNorm;\n  T = 2.0 * (R.w * Qt.xyz - Qt.w * R.xyz + cross(R.xyz, Qt.xyz));\n\n}\n\nvec3 VectorTransformQuat(vec3 v, vec4 Q) {\n\treturn v + 2.0 * cross(Q.xyz, cross(Q.xyz, v) + Q.w * v);\n}\n\nvoid CCSkin(inout vec3 position) {\n  vec4 R; vec3 T, S;\n  skinRTS(R, T, S);\n  position = VectorTransformQuat(position * S, R) + T;\n}\n\nvoid CCSkin(inout StandardAttributes attr) {\n  vec4 R; vec3 T, S;\n  skinRTS(R, T, S);\n  attr.position = VectorTransformQuat(attr.position * S, R) + T;\n  attr.normal = VectorTransformQuat(attr.normal, R);\n  attr.tangent.xyz = VectorTransformQuat(attr.tangent.xyz, R);\n}\n\n#endif\n\nvoid CCVertInput (out highp vec3 position) {\n  CCDecode(position);\n  #if CC_USE_SKINNING\n    CCSkin(position);\n  #endif\n}\n\nout vec3 viewDir;\n\nvec4 vert () {\n  CCVertInput(viewDir);\n\n  mat4 matViewRotOnly = mat4(mat3(cc_matView));\n  highp vec4 pos = cc_matProj * matViewRotOnly * vec4(viewDir, 1.0);\n  pos.z = pos.w * 0.99999;\n  return pos;\n}\n\nvoid main() { gl_Position = vert(); }\n",
+        "frag": "\nprecision mediump float;\nuniform samplerCube cc_environment;\n\nvec3 unpackNormal(vec4 nmap) {\n  return nmap.xyz * 2.0 - 1.0;\n}\n\nvec3 unpackRGBE(vec4 rgbe) {\n    return rgbe.rgb * pow(2.0, rgbe.a * 255.0 - 128.0);\n}\n\nvec3 SRGBToLinear(vec3 gamma)\n{\n\treturn pow(gamma, vec3(2.2));\n\n}\n\nvec3 LinearToSRGB(vec3 linear)\n{\n\treturn pow(linear, vec3(0.454545));\n\n}\nuniform CCGlobal {\n  vec4 cc_time;\n\n  vec4 cc_screenSize;\n\n  vec4 cc_screenScale;\n\n  vec4 cc_nativeSize;\n\n  mat4 cc_matView;\n  mat4 cc_matViewInv;\n  mat4 cc_matProj;\n  mat4 cc_matProjInv;\n  mat4 cc_matViewProj;\n  mat4 cc_matViewProjInv;\n  vec4 cc_cameraPos;\n\n  vec4 cc_exposure;\n\n  vec4 cc_mainLitDir;\n\n  vec4 cc_mainLitColor;\n\n  vec4 cc_ambientSky;\n  vec4 cc_ambientGround;\n};\n\nvec4 CCFragOutput(vec4 color) {\n  #if CC_USE_HDR\n    color.rgb = mix(color.rgb, SRGBToLinear(color.rgb) * cc_exposure.w, vec3(cc_exposure.z));\n\t#endif\n\treturn color;\n}\n\nin vec3 viewDir;\n\nvec4 frag () {\n  #if USE_RGBE_CUBEMAP\n    vec3 c = unpackRGBE(texture(cc_environment, viewDir));\n    c = LinearToSRGB(c / (1.0 + c));\n    vec4 o = vec4(c, 1.0);\n  #else\n    vec4 o = texture(cc_environment, viewDir);\n  #endif\n  return CCFragOutput(o);\n}\n\nout vec4 cc_FragColor;\nvoid main() { cc_FragColor = frag(); }\n"
+      },
+      "glsl1": {
+        "vert": "\nprecision mediump float;\nuniform mat4 cc_matView;\nuniform mat4 cc_matProj;\n\nattribute vec3 a_position;\n\nvoid CCDecode (out vec3 position) {\n  position = a_position;\n}\n\n#if CC_USE_SKINNING\n\nstruct StandardAttributes {\n  vec3 position;\n  vec3 normal;\n  vec4 tangent;\n};\n\nattribute vec4 a_weights;\nattribute vec4 a_joints;\n\n#if CC_USE_SKINNING == 1\n  uniform vec4 cc_jointsData[90];\n\n#else\n  uniform vec4 cc_jointsTextureSizeInv;\n  uniform sampler2D cc_jointsTexture;\n#endif\n\n#if CC_USE_SKINNING == 2\n  float decode32(highp vec4 rgba) {\n    rgba = rgba * 255.0;\n\n    float Sign = 1.0 - step(128.0, rgba[3]) * 2.0;\n    float Exponent = 2.0 * mod(rgba[3], 128.0) + step(128.0, rgba[2]) - 127.0;\n    float Mantissa = mod(rgba[2], 128.0) * 65536.0 + rgba[1] * 256.0 + rgba[0] + 8388608.0;\n    return Sign * exp2(Exponent - 23.0) * Mantissa;\n  }\n#endif\n\n#if CC_USE_SKINNING == 1\n  vec3 getJointDQ(float i, out vec4 Qr, out vec4 Qt) {\n    int idx = 3 * int(i);\n    Qr = cc_jointsData[idx];\n    Qt = cc_jointsData[idx + 1];\n    return cc_jointsData[idx + 2].xyz;\n  }\n#elif CC_USE_SKINNING == 2\n  vec3 getJointDQ(float i, out vec4 Qr, out vec4 Qt) {\n    float y = (i + 0.5) * cc_jointsTextureSizeInv.y;\n    Qr = vec4(\n      decode32(texture2D(cc_jointsTexture, vec2((0.5 / 12.0), y))),\n      decode32(texture2D(cc_jointsTexture, vec2((1.5 / 12.0), y))),\n      decode32(texture2D(cc_jointsTexture, vec2((2.5 / 12.0), y))),\n      decode32(texture2D(cc_jointsTexture, vec2((3.5 / 12.0), y)))\n    );\n    Qt = vec4(\n      decode32(texture2D(cc_jointsTexture, vec2((4.5 / 12.0), y))),\n      decode32(texture2D(cc_jointsTexture, vec2((5.5 / 12.0), y))),\n      decode32(texture2D(cc_jointsTexture, vec2((6.5 / 12.0), y))),\n      decode32(texture2D(cc_jointsTexture, vec2((7.5 / 12.0), y)))\n    );\n    return vec3(\n      decode32(texture2D(cc_jointsTexture, vec2((8.5 / 12.0), y))),\n      decode32(texture2D(cc_jointsTexture, vec2((9.5 / 12.0), y))),\n      decode32(texture2D(cc_jointsTexture, vec2((10.5 / 12.0), y)))\n    );\n  }\n#elif CC_USE_SKINNING == 3\n  vec3 getJointDQ(float i, out vec4 Qr, out vec4 Qt) {\n    float y = (i + 0.5) * cc_jointsTextureSizeInv.y;\n    Qr = texture2D(cc_jointsTexture, vec2((0.5 / 3.0), y));\n    Qt = texture2D(cc_jointsTexture, vec2((1.5 / 3.0), y));\n    return texture2D(cc_jointsTexture, vec2((2.5 / 3.0), y)).xyz;\n  }\n#endif\n\nvoid skinRTS(out vec4 R, out vec3 T, out vec3 S) {\n  vec4 r, t, Qt = vec4(0.0);\n  R = vec4(0.0); S = vec3(0.0);\n\n  for (int i = 0; i < 4; i++) {\n    float w = a_weights[i];\n    S += getJointDQ(a_joints[i], r, t) * w;\n    R += r * w; Qt += t * w;\n  }\n\n  float invNorm = 1.0 / length(R); R *= invNorm; Qt *= invNorm;\n  T = 2.0 * (R.w * Qt.xyz - Qt.w * R.xyz + cross(R.xyz, Qt.xyz));\n\n}\n\nvec3 VectorTransformQuat(vec3 v, vec4 Q) {\n\treturn v + 2.0 * cross(Q.xyz, cross(Q.xyz, v) + Q.w * v);\n}\n\nvoid CCSkin(inout vec3 position) {\n  vec4 R; vec3 T, S;\n  skinRTS(R, T, S);\n  position = VectorTransformQuat(position * S, R) + T;\n}\n\nvoid CCSkin(inout StandardAttributes attr) {\n  vec4 R; vec3 T, S;\n  skinRTS(R, T, S);\n  attr.position = VectorTransformQuat(attr.position * S, R) + T;\n  attr.normal = VectorTransformQuat(attr.normal, R);\n  attr.tangent.xyz = VectorTransformQuat(attr.tangent.xyz, R);\n}\n\n#endif\n\nvoid CCVertInput (out highp vec3 position) {\n  CCDecode(position);\n  #if CC_USE_SKINNING\n    CCSkin(position);\n  #endif\n}\n\nvarying vec3 viewDir;\n\nvec4 vert () {\n  CCVertInput(viewDir);\n\n  mat4 matViewRotOnly = mat4(mat3(cc_matView));\n  highp vec4 pos = cc_matProj * matViewRotOnly * vec4(viewDir, 1.0);\n  pos.z = pos.w * 0.99999;\n  return pos;\n}\n\nvoid main() { gl_Position = vert(); }\n",
+        "frag": "\nprecision mediump float;\nuniform samplerCube cc_environment;\n\nvec3 unpackNormal(vec4 nmap) {\n  return nmap.xyz * 2.0 - 1.0;\n}\n\nvec3 unpackRGBE(vec4 rgbe) {\n    return rgbe.rgb * pow(2.0, rgbe.a * 255.0 - 128.0);\n}\n\nvec3 SRGBToLinear(vec3 gamma)\n{\n\treturn pow(gamma, vec3(2.2));\n\n}\n\nvec3 LinearToSRGB(vec3 linear)\n{\n\treturn pow(linear, vec3(0.454545));\n\n}\nuniform vec4 cc_exposure;\n\nvec4 CCFragOutput(vec4 color) {\n  #if CC_USE_HDR\n    color.rgb = mix(color.rgb, SRGBToLinear(color.rgb) * cc_exposure.w, vec3(cc_exposure.z));\n\t#endif\n\treturn color;\n}\n\nvarying vec3 viewDir;\n\nvec4 frag () {\n  #if USE_RGBE_CUBEMAP\n    vec3 c = unpackRGBE(textureCube(cc_environment, viewDir));\n    c = LinearToSRGB(c / (1.0 + c));\n    vec4 o = vec4(c, 1.0);\n  #else\n    vec4 o = textureCube(cc_environment, viewDir);\n  #endif\n  return CCFragOutput(o);\n}\n\nvoid main() { gl_FragColor = frag(); }\n"
+      },
+      "builtins": {
+        "globals": {
+          "blocks": [
+            {
+              "name": "CCGlobal",
+              "defines": []
+            }
+          ],
+          "samplers": [
+            {
+              "name": "cc_environment",
+              "defines": []
+            }
+          ]
+        },
+        "locals": {
+          "blocks": [
+            {
+              "name": "CCSkinning",
+              "defines": [
+                "CC_USE_SKINNING"
+              ]
+            },
+            {
+              "name": "CCSkinningTexture",
+              "defines": [
+                "CC_USE_SKINNING"
+              ]
+            }
+          ],
+          "samplers": [
+            {
+              "name": "cc_jointsTexture",
+              "defines": [
+                "CC_USE_SKINNING"
+              ]
+            }
+          ]
+        }
+      },
+      "defines": [
+        {
+          "name": "CC_USE_SKINNING",
+          "type": "number",
+          "defines": [],
+          "range": [
+            0,
+            3
+          ]
+        },
+        {
+          "name": "CC_USE_HDR",
+          "type": "boolean",
+          "defines": []
+        },
+        {
+          "name": "USE_RGBE_CUBEMAP",
+          "type": "boolean",
+          "defines": []
+        }
+      ],
+      "blocks": [],
+      "samplers": [],
+      "dependencies": {},
+      "name": "builtin-skybox|sky-vs:vert|sky-fs:frag"
+    }
+  ]
+}

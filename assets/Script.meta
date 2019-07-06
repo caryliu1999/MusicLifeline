@@ -1,0 +1,13 @@
+{
+  "ver": "0.0.1",
+  "importer": "*",
+  "imported": true,
+  "uuid": "c0bc51d5-ff90-4b91-9a40-ff20301ccbb3",
+  "displayName": "",
+  "files": [],
+  "subMetas": {},
+  "userData": {
+    "moduleId": "project:///assets/Script/Game.ts",
+    "importAsPlugin": false
+  }
+}

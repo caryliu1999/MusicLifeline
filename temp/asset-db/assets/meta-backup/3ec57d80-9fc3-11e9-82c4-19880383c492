@@ -1,0 +1,15 @@
+{
+  "ver": "1.0.80",
+  "importer": "javascript",
+  "imported": true,
+  "uuid": "d2e1a57e-ea57-46b0-818a-ea93af604dbb",
+  "displayName": "",
+  "files": [
+    ".js"
+  ],
+  "subMetas": {},
+  "userData": {
+    "moduleId": "project:///assets/res/data.js",
+    "importAsPlugin": false
+  }
+}
