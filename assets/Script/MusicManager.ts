@@ -55,8 +55,9 @@ export class MusicManager extends Component {
     pool = new cc.NodePool();
     modelPool = [];
     actorInputData = [];
-    mistake = 50; // 允许误差 50 ms
-
+    mistake = 200; // 允许误差 400 ms
+    moveTime = 2000; // 移动时间 2s
+    matchIndex = 0;
     start () {
         // init pool
         for (let i = 0; i < this.models.length; i++) {
@@ -67,9 +68,10 @@ export class MusicManager extends Component {
     play () {
         this.musicIndex = 0;
         this.curTime = 0;
-        this.audio.play();
         this.musicData = music1;
         this.state = GameState.PLAY;
+
+        setTimeout(this.audio.play().bind(this), 2000);
     }
 
     update (dt) {
@@ -79,7 +81,7 @@ export class MusicManager extends Component {
         
         this.curTime += dt;
         let tTime = this.musicData[this.musicIndex] / 1000;
-        if (this.curTime >= tTime + this.offset / 1000) {
+        if (this.curTime >= tTime - this.moveTime / 1000) {
             this.musicIndex += 2;
             this.movePointer();
         }
@@ -104,6 +106,8 @@ export class MusicManager extends Component {
 
     complete (node) {
         this.pool.put(node);
+        // 更新matchIndex
+        this.matchIndex += 2;
 
         for (let i = 0; i < this.actorNum; i++) {
             //this.emission(i, this.isMatch(i));
@@ -117,7 +121,11 @@ export class MusicManager extends Component {
     }
 
     isMatch (id) {
-        let match = (this.musicData[this.musicIndex] / 1000 - this.curTime) < this.mistake;
+        if (this.matchIndex >= this.musicData.length) {
+            return MatchState.FAIL;
+        }
+        let matchTime = this.musicData[this.matchIndex] / 1000 - this.curTime;
+        let match = matchTime < (this.mistake / 1000) || matchTime > (this.mistake / 2000);
         return match ? MatchState.PERFECT : MatchState.FAIL;
     }
 
@@ -144,7 +152,7 @@ export class MusicManager extends Component {
         let layer = this.modelLayer[id];
         layer.addChild(model);
         let comp = model.getComponent(Energy);
-        comp.reuse(this.beginX, this.endX, 3000, this.modelEnd.bind(this));
+        comp.reuse(this.beginX, this.endX, this.moveTime, this.modelEnd.bind(this));
     }
 
     modelEnd (modelType, node) {

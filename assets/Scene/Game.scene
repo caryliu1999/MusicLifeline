@@ -11,7 +11,7 @@
   },
   {
     "__type__": "cc.Scene",
-    "_name": "Scene",
+    "_name": "",
     "_objFlags": 0,
     "_parent": null,
     "_children": [
@@ -43,10 +43,10 @@
         "__id__": 50
       },
       {
-        "__id__": 55
+        "__id__": 51
       },
       {
-        "__id__": 51
+        "__id__": 55
       }
     ],
     "_active": true,
@@ -1782,7 +1782,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Mode_1",
+    "_name": "Mode_0",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1
@@ -1817,9 +1817,9 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
-      "z": 1
+      "x": 70,
+      "y": 70,
+      "z": 70
     },
     "_layer": 1,
     "_euler": {
@@ -1828,11 +1828,11 @@
       "y": 0,
       "z": 0
     },
-    "_id": "7e+9Oo4thDYaBVGjuoj8S9"
+    "_id": "7dZ9se/41JfKbMJsXcORY2"
   },
   {
     "__type__": "cc.ModelComponent",
-    "_name": "Sphere<ModelComponent>",
+    "_name": "Cube<ModelComponent>",
     "_objFlags": 0,
     "node": {
       "__id__": 51
@@ -1845,15 +1845,15 @@
     ],
     "_viewID": 0,
     "_mesh": {
-      "__uuid__": "1263d74c-8167-4928-91a6-4e2672411f47@sphere.mesh"
+      "__uuid__": "1263d74c-8167-4928-91a6-4e2672411f47@box.mesh"
     },
     "_shadowCastingMode": 0,
     "_receiveShadows": false,
-    "_id": "3aIhRaccVLvqIfk+Eq+Kdv"
+    "_id": "875dWVR4NEJJikijzMgFl6"
   },
   {
-    "__type__": "cc.SphereColliderComponent",
-    "_name": "",
+    "__type__": "cc.BoxColliderComponent",
+    "_name": "Mode_0<BoxColliderComponent>",
     "_objFlags": 0,
     "node": {
       "__id__": 51
@@ -1866,23 +1866,28 @@
       "y": 0,
       "z": 0
     },
-    "_radius": 0.5,
-    "_id": "9dEotg8odK36sWF6zGl5dd"
+    "_size": {
+      "__type__": "cc.Vec3",
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "_id": "4ak/rpvKRB8pObNLG7c8zH"
   },
   {
     "__type__": "008a3qSmoxLfKhIWdy+cMmP",
-    "_name": "",
+    "_name": "Mode_0<Energy>",
     "_objFlags": 0,
     "node": {
       "__id__": 51
     },
     "_enabled": true,
-    "modelType": 1,
-    "_id": "77DRsPsgxPWJllzxc2YBrE"
+    "modelType": 0,
+    "_id": "8bYPRb2wpHhJBd3Bz2VRNf"
   },
   {
     "__type__": "cc.Node",
-    "_name": "Mode_2",
+    "_name": "Mode_1",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1
@@ -1928,11 +1933,11 @@
       "y": 0,
       "z": 0
     },
-    "_id": "7dZ9se/41JfKbMJsXcORY2"
+    "_id": "7e+9Oo4thDYaBVGjuoj8S9"
   },
   {
     "__type__": "cc.ModelComponent",
-    "_name": "Cube<ModelComponent>",
+    "_name": "Sphere<ModelComponent>",
     "_objFlags": 0,
     "node": {
       "__id__": 55
@@ -1945,15 +1950,15 @@
     ],
     "_viewID": 0,
     "_mesh": {
-      "__uuid__": "1263d74c-8167-4928-91a6-4e2672411f47@box.mesh"
+      "__uuid__": "1263d74c-8167-4928-91a6-4e2672411f47@sphere.mesh"
     },
     "_shadowCastingMode": 0,
     "_receiveShadows": false,
-    "_id": "875dWVR4NEJJikijzMgFl6"
+    "_id": "3aIhRaccVLvqIfk+Eq+Kdv"
   },
   {
-    "__type__": "cc.BoxColliderComponent",
-    "_name": "",
+    "__type__": "cc.SphereColliderComponent",
+    "_name": "Mode_1<SphereColliderComponent>",
     "_objFlags": 0,
     "node": {
       "__id__": 55
@@ -1966,24 +1971,19 @@
       "y": 0,
       "z": 0
     },
-    "_size": {
-      "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
-      "z": 1
-    },
-    "_id": "4ak/rpvKRB8pObNLG7c8zH"
+    "_radius": 0.5,
+    "_id": "9dEotg8odK36sWF6zGl5dd"
   },
   {
     "__type__": "008a3qSmoxLfKhIWdy+cMmP",
-    "_name": "",
+    "_name": "Mode_1<Energy>",
     "_objFlags": 0,
     "node": {
       "__id__": 55
     },
     "_enabled": true,
-    "modelType": 0,
-    "_id": "8bYPRb2wpHhJBd3Bz2VRNf"
+    "modelType": 1,
+    "_id": "77DRsPsgxPWJllzxc2YBrE"
   },
   {
     "__type__": "cc.Node",
