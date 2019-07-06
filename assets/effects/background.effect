@@ -42,7 +42,7 @@ CCProgram bg-fs %{
   };
 
   vec3 bgColor = vec3(0.01, 0.16, 0.42);
-  vec3 rectColor = vec3(0.01, 0.26, 0.57);
+  vec3 rectColor = vec3(0.01, 0.04, 0.1);
 
   //noise background
   const float noiseIntensity = 2.8;
@@ -50,7 +50,7 @@ CCProgram bg-fs %{
   const vec2 glowPos = vec2(-2., 0.);
 
   //rectangles
-  const float total = 60.;//number of rectangles
+  const float total = 20.;//number of rectangles
   const float minSize = 0.03;//rectangle min size
   const float maxSize = 0.08-minSize;//rectangle max size
   const float yDistribution = 0.5;
@@ -99,10 +99,10 @@ CCProgram bg-fs %{
     rz *= dot(bp*intensity,bp)+1.2;
 
     //bazooca line
-    //rz *= sin(uv.x*.5+velocity*.8);
+    rz *= sin(uv.x*.5+velocity*.8);
 
     vec3 col = bgColor/(.1-rz);
-    return sqrt(abs(col));
+    return abs(col);
   }
 
   float rectangle (vec2 uv, vec2 pos, float width, float height, float blur) {
@@ -124,9 +124,9 @@ CCProgram bg-fs %{
     vec3 color = bg(uv)*(2.-abs(uv.y*2.));
 
     //rectangles
-    float velX = -cc_time.x/8.;
-    float velY = cc_time.x/10.;
-    for (float i=0.; i < total; i++){
+    float velX = -cc_time.x / 8.;
+    float velY = cc_time.x / 10.;
+    for (float i = 0.; i < total; i++) {
       float index = i/total;
       float rnd = random(vec2(index));
       vec3 pos = vec3(0, 0., 0.);

@@ -28,9 +28,9 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -1.5,
-      "y": 0,
-      "z": -4
+      "x": -233.579,
+      "y": 107.607,
+      "z": -300
     },
     "_lrot": {
       "__type__": "cc.Quat",
@@ -41,8 +41,8 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
+      "x": 150,
+      "y": 150,
       "z": 1
     },
     "_layer": 1,
@@ -81,13 +81,10 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "5f4746b4-54dc-48f2-8490-caad2590659f"
     },
     "fileId": "356qiFHZ5MoIsvl7P1UfYY",
     "sync": false,
-    "_synced": {
-      "default": false,
-      "serializable": false
-    }
+    "_synced": true
   }
 ]
