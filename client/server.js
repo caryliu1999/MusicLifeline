@@ -40,7 +40,7 @@ var httpServer = http.createServer(function(request, response) {
         "wmv": "video/x-ms-wmv",
         "xml": "text/xml"
     };
-    
+
     var requestUrl = request.url;
 
     var pathName = url.parse(requestUrl).pathname;
@@ -80,10 +80,10 @@ var httpServer = http.createServer(function(request, response) {
                 if (err) {
                     console.log("读取路径失败！");
                 } else {
-                  
+
                     var flag = false;
                     for (var file of files) {
-                        
+
                         if (file === "index.html") {
                             readFile(filePath + (filePath[filePath.length-1]=='/' ? '' : '/') + 'index.html', "text/html");
                             flag = true;
@@ -100,7 +100,7 @@ var httpServer = http.createServer(function(request, response) {
             });
         }
 
-     
+
         function readFile(filePath, contentType){
             response.setHeader("Access-Control-Allow-Origin", "*");
             response.setHeader("Access-Control-Allow-Headers", "X-Requested-With");
@@ -118,7 +118,7 @@ var httpServer = http.createServer(function(request, response) {
 });
 
 httpServer.listen(8080, function() {
-    console.log((new Date()) + " Server is listening on port 6502");
+    console.log((new Date()) + " Server is listening on port 8080");
 });
 
 var kcp = require('node-kcp');
@@ -166,7 +166,7 @@ console.log("***CREATED");
 
 console.log("***CRETING REQUEST HANDLER");
 wsServer.on('request', function(request) {
-  
+
   // Accept the request and get a connection.
   var connection = request.accept("", request.origin);
 
@@ -205,10 +205,10 @@ wsServer.on('request', function(request) {
           // to all clients
       }
   });
-  
+
   // Handle the WebSocket "close" event; this means a user has logged off
   // or has been disconnected.
-  
+
   connection.on('close', function(connection) {
   });
 });

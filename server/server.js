@@ -159,12 +159,13 @@ server.on('listening', () => {
             var kcpobj = clients[k];
         	kcpobj.update(Date.now());
             var recv = kcpobj.recv();
-            if (recv === 'hand shake') {
-                kcpobj.send(id++);
+            if (recv && recv.toString() === 'handshake') {
+                console.log('hand shake');
+                kcpobj.send((++id).toString());
             }
-        	else {
+        	else if (recv) {
             	console.log(`server recv ${recv} from ${kcpobj.context().address}:${kcpobj.context().port}`);
-           		connectionArray.forEach(val => val.sendUTF(recv));
+           		connectionArray.forEach(val => val.sendUTF(recv.toString()));
        	 	}
        	}
     }, interval);

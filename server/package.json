@@ -4,6 +4,6 @@
   "description": "A simple WebSocket-based chat server.",
   "dependencies": {
     "node-kcp": "^1.0.10",
-    "websocket": "^1.0.28"
+    "websocket": "^1.0.29"
   }
 }
