@@ -112,7 +112,9 @@ function connect() {
   }
 
   connection.onopen = function(evt) {
-    document.getElementById('start').style.display = "none";
+    var start = document.getElementById('start');
+    document.getElementById('label').innerHTML = 'CLAP!';
+    start.onclick = null;
     isOpen = true;
     console.log("***ONOPEN");
   };
