@@ -71,7 +71,7 @@ export class MusicManager extends Component {
         this.musicData = music1;
         this.state = GameState.PLAY;
 
-        setTimeout(this.audio.play().bind(this), 2000);
+        setTimeout(this.audio.play(), 2600);
     }
 
     update (dt) {
@@ -82,7 +82,7 @@ export class MusicManager extends Component {
         this.curTime += dt;
         let tTime = this.musicData[this.musicIndex] / 1000;
         if (this.curTime >= tTime - this.moveTime / 1000) {
-            this.musicIndex += 2;
+            this.musicIndex += 1;
             this.movePointer();
         }
 
@@ -107,7 +107,7 @@ export class MusicManager extends Component {
     complete (node) {
         this.pool.put(node);
         // 更新matchIndex
-        this.matchIndex += 2;
+        this.matchIndex += 1;
 
         for (let i = 0; i < this.actorNum; i++) {
             //this.emission(i, this.isMatch(i));
