@@ -32,15 +32,15 @@
     {
       "saturation": 0.7,
       "value": 0.2,
+      "meshScale": {
+        "__type__": "cc.Vec2",
+        "x": 2,
+        "y": 1
+      },
       "speed": {
         "__type__": "cc.Vec2",
         "x": 10,
         "y": 0
-      },
-      "scale": {
-        "__type__": "cc.Vec2",
-        "x": 2,
-        "y": 1
       }
     }
   ]
