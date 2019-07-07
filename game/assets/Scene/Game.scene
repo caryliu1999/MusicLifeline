@@ -230,7 +230,7 @@
         "__id__": 6
       }
     ],
-    "_active": true,
+    "_active": false,
     "_level": 2,
     "_components": [
       {
@@ -819,7 +819,7 @@
     "_enabled": true,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 6,
+      "width": 2,
       "height": 640
     },
     "_anchorPoint": {
@@ -875,7 +875,7 @@
     "_enabled": true,
     "_alignFlags": 8,
     "_target": null,
-    "_left": -103,
+    "_left": -101,
     "_right": 0,
     "_top": 0,
     "_bottom": 0,
@@ -952,7 +952,7 @@
     "_enabled": true,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 6,
+      "width": 4,
       "height": 640
     },
     "_anchorPoint": {
@@ -1814,8 +1814,8 @@
     "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 1000,
-      "y": 0,
+      "x": 1112.095,
+      "y": 69.877,
       "z": 0
     },
     "_lrot": {
@@ -2550,7 +2550,7 @@
   },
   {
     "__type__": "cc.SphereColliderComponent",
-    "_name": "",
+    "_name": "Host<SphereColliderComponent>",
     "_objFlags": 0,
     "node": {
       "__id__": 76
@@ -2703,7 +2703,7 @@
   },
   {
     "__type__": "27c54gC2jlF6LCks6DPwFbZ",
-    "_name": "",
+    "_name": "Host<Actor>",
     "_objFlags": 0,
     "node": {
       "__id__": 76

@@ -131,5 +131,8 @@ export class Energy extends Component {
         if (this.curTime >= totalTime) {
             this.callback(this.modelType, this.node);
         }
+
+        this.node.eulerAngles.z
+        this.node.setRotationFromEuler(0, 0, this.node.eulerAngles.z + 1);
     }
 }

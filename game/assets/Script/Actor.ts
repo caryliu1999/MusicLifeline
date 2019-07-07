@@ -34,8 +34,8 @@ export class Actor extends Component {
     modelType = ModelType.SPHERE;
 
     scaleFactor = 1;
-    maxScale = 100;
-    minScale = 20
+    maxScale = 1000;
+    minScale = 30;
 
     time = 0;
     subTime = 2000;
@@ -53,7 +53,7 @@ export class Actor extends Component {
         if (this.musicMgr.state != GameState.PLAY) {
             return
         }  
-        
+
         let target: Energy = e.otherCollider.node.getComponent(Energy);
         if (target.modelType == this.modelType) {
             let scale = this.node.getScale();
@@ -74,11 +74,11 @@ export class Actor extends Component {
     }
 
     updateProgress () {
-        let cur = (this.node.getScale().x - this.minScale) / (this.maxScale - this.minScale);
-        if (cur <= 0) {
+        //let cur = (this.node.getScale().x - this.minScale) / (this.maxScale - this.minScale);
+        if (this.node.getScale().x <= this.minScale) {
             this.musicMgr.gameOver(false);
         }
-        this.progress.progress = cur;
+        //this.progress.progress = cur;
     }
 
     update (dt) {
