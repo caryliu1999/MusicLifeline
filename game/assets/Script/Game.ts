@@ -46,6 +46,8 @@ export class Game extends Component {
 
     time = 0;
 
+    vec3 = vec3.create(0, 0, 0);
+
     onLoad () {
         // mouse events included
         cc.systemEvent.on(cc.SystemEvent.EventType.TOUCH_START, this.onTouchBegin, this);
@@ -74,9 +76,12 @@ export class Game extends Component {
 	}
 
 	onTouchMove (e) {
-        const curX = e.getLocationX(), curY = e.getLocationY();
-        let touchPos = this.mainCamera.screenToWorld(vec3.create(curX, curY, 0)) 
         if (this._touch) {
+            const location = e.getLocation();
+            const curX = location.x, curY = location.y;
+            this.vec3.x = curX;
+            this.vec3.y = curY;
+            let touchPos = this.mainCamera.screenToWorld(this.vec3);
             let wp = this.collider.node.getWorldPosition();
             this.collider.node.setWorldPosition(touchPos.x, touchPos.y, wp.z);
         }
@@ -91,7 +96,7 @@ export class Game extends Component {
 		const connection = new WebSocket(serverUrl);
 		connection.onmessage = (event: any) => {
 			// clap
-            console.log('clap ++ ' + event.data);
+            //console.log('clap ++ ' + event.data);
             this.dispatchMessage(parseInt(event.data), 0);
 		};
 		

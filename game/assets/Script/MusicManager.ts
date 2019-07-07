@@ -126,6 +126,7 @@ export class MusicManager extends Component {
 
     complete (node) {
         this.pool.put(node);
+        this.particle.stop();
 		this.particle.play();
         // 更新matchIndex
         this.matchIndex += 1;
