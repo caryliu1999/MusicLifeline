@@ -1,0 +1,15 @@
+{
+  "ver": "1.0.802",
+  "importer": "typescript",
+  "imported": true,
+  "uuid": "fe839924-1a93-49fa-a2da-3aa0ab1aada4",
+  "displayName": "",
+  "files": [
+    ".js"
+  ],
+  "subMetas": {},
+  "userData": {
+    "moduleId": "project:///assets/Script/Recorder.ts",
+    "importAsPlugin": false
+  }
+}

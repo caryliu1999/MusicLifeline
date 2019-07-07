@@ -8,8 +8,8 @@
 //  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
 
-import { _decorator, Component, AudioSourceComponent, Enum } from "Cocos3D";
-import { music1 } from "./data";
+import { _decorator, Component, AudioSourceComponent } from "Cocos3D";
+import { beats2 as beats } from "./data";
 import { Pointer } from "./Pointer";
 import { Energy } from "./Energy";
 import { GameState , MatchState, ModelType} from "./Enums";
@@ -19,7 +19,7 @@ const { ccclass, property } = _decorator;
 
 @ccclass("MusicManager")
 export class MusicManager extends Component {
-    
+
     @property(AudioSourceComponent)
     audio = null;
 
@@ -68,7 +68,7 @@ export class MusicManager extends Component {
     play () {
         this.musicIndex = 0;
         this.curTime = 0;
-        this.musicData = music1;
+        this.musicData = beats;
         this.state = GameState.PLAY;
 
         setTimeout(this.audio.play(), 2600);
@@ -78,7 +78,7 @@ export class MusicManager extends Component {
         if (this.state != GameState.PLAY) {
             return;
         }
-        
+
         this.curTime += dt;
         let tTime = this.musicData[this.musicIndex] / 1000;
         if (this.curTime >= tTime - this.moveTime / 1000) {
@@ -93,9 +93,9 @@ export class MusicManager extends Component {
 
     movePointer () {
         let pointer = null;
-        if (this.pool.size() > 0) { 
+        if (this.pool.size() > 0) {
             pointer = this.pool.get();
-        } else { 
+        } else {
             pointer = cc.instantiate(this.pointer);
         }
 
