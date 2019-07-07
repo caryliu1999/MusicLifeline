@@ -16,7 +16,7 @@ var path = require('path');
 var WebSocketServer = require('websocket').server;
 var cp = require('child_process');
 
-const server = process.argv[2] || '10.44.63.14'; // gets the first argument on cli
+const server = process.argv[2] || '10.44.63.17'; // gets the first argument on cli
 
 var connectionArray = [];
 var nextID = Date.now();
@@ -120,15 +120,15 @@ var httpServer = http.createServer(function(request, response) {
     });
 });
 
-httpServer.listen(8080, function() {
-    console.log((new Date()) + " Server is listening on port 8080");
+httpServer.listen(8123, function() {
+    console.log((new Date()) + " Server is listening on port 8123");
 	cp.exec(`explorer http://localhost:8123`, function () {
     });
 });
 
 console.log('connect to', server);
 var kcp = require('node-kcp');
-var kcpobj = new kcp.KCP(123, {address: server, port: 41234});
+var kcpobj = new kcp.KCP(123, { address: server, port: 41234 });
 var dgram = require('dgram');
 var client = dgram.createSocket('udp4');
 var msg = 'hello world';
@@ -155,7 +155,7 @@ var interval = setInterval(() => {
     kcpobj.update(Date.now());
     var recv = kcpobj.recv();
     if (recv) {
-        
+
         thisId = recv.toString();
         console.log('id:' + thisId);
         clearInterval(interval);

@@ -85,3 +85,7 @@ beat-detector/data.js
 
 clap-client/node
 clap-client/node.exe
+*-win
+*-mac
+*.zip
+*.rar
