@@ -8,7 +8,7 @@
 //  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
 
-import { _decorator, Component, AudioSourceComponent, LabelComponent } from "Cocos3D";
+import { _decorator, Component, AudioSourceComponent, LabelComponent, ParticleSystemComponent } from "Cocos3D";
 import { beats2 as beats } from "./data";
 import { Pointer } from "./Pointer";
 import { Energy } from "./Energy";
@@ -48,6 +48,9 @@ export class MusicManager extends Component {
 
     @property(LabelComponent)
     gameOverLab = null;
+	
+	@property(ParticleSystemComponent)
+	particle = null;
 
     state = GameState.STOP;
     musicData = [];
@@ -123,6 +126,7 @@ export class MusicManager extends Component {
 
     complete (node) {
         this.pool.put(node);
+		this.particle.play();
         // 更新matchIndex
         this.matchIndex += 1;
 
