@@ -14,6 +14,7 @@ var fs = require('fs');
 var url = require('url');
 var path = require('path');
 var WebSocketServer = require('websocket').server;
+var cp = require('child_process');
 
 const server = process.argv[2] || '10.44.63.14'; // gets the first argument on cli
 
@@ -121,6 +122,8 @@ var httpServer = http.createServer(function(request, response) {
 
 httpServer.listen(8080, function() {
     console.log((new Date()) + " Server is listening on port 8080");
+	cp.exec(`explorer http://localhost:8123`, function () {
+    });
 });
 
 console.log('connect to', server);
