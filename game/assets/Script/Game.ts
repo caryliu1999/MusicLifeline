@@ -53,6 +53,7 @@ export class Game extends Component {
         cc.systemEvent.on(cc.SystemEvent.EventType.TOUCH_END, this.onTouchEnd, this);
 
         cc.director._physicsSystem.enabled = true;
+        cc.profiler.hideStats();
 	}
 
 	onDestroy () {

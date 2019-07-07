@@ -132,7 +132,9 @@ export class Energy extends Component {
             this.callback(this.modelType, this.node);
         }
 
-        this.node.eulerAngles.z
-        this.node.setRotationFromEuler(0, 0, this.node.eulerAngles.z + 1);
+
+        if (this.modelType == ModelType.RECT) {
+            this.node.setRotationFromEuler(0, 0, this.node.eulerAngles.z + 1);
+        }
     }
 }
