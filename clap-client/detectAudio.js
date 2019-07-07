@@ -49,7 +49,7 @@ function connect() {
     scheme += "s";
   }
 
-  serverUrl = scheme + "://" + document.location.hostname + ":8080";
+  serverUrl = scheme + "://" + document.location.hostname + ":8123";
 
   connection = new WebSocket(serverUrl);
   console.log("***CREATED WEBSOCKET");
