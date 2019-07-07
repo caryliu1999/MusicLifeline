@@ -8,7 +8,7 @@
 //  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
 
-import { _decorator, Component, Enum, ColliderComponent, BoxColliderComponent, SphereColliderComponent } from "Cocos3D";
+import { _decorator, Component, Enum, ColliderComponent, BoxColliderComponent, SphereColliderComponent, ModelComponent, Color } from "Cocos3D";
 import { ModelType } from "./Enums";
 import { Actor } from "./Actor";
 const { ccclass, property } = _decorator;
@@ -24,6 +24,9 @@ export class Energy extends Component {
     @property
     modelType = 0;
 
+    @property
+    color = new Color();
+
     collider = null;
 
     callback = null;
@@ -31,6 +34,9 @@ export class Energy extends Component {
     end = null;
     totalTime = 0;
     curTime = 0;
+
+    beginY = 0;
+    endY = 0;
 
 
     onLoad () {
@@ -41,6 +47,11 @@ export class Energy extends Component {
         }
         //碰撞事件
         this.collider.on("onTriggerEnter", this.onCollisionEnter, this);
+        const mat = this.node.getComponentInChildren(ModelComponent).material;
+        mat.setProperty('color', this.color);
+        const v4 = mat.getProperty('intensitySize');
+        v4.x = 2000;
+        mat.setProperty('intensitySize', v4);
     }
     
     onDestroy () {
@@ -80,6 +91,8 @@ export class Energy extends Component {
 
     move () {
         let position = this.node.getPosition();
+        this.beginY = position.y;
+        this.endY = Math.random() * 640;
         this.node.setPosition(this.begin, position.y, position.z);
         this.node.active = true;
     }
@@ -107,12 +120,13 @@ export class Energy extends Component {
         let offsetX = (this.curTime / totalTime) * totalX * dirxX;
         let positionX = this.begin + offsetX;
         // y
-        // let dirY = (this.end.y - this.begin.y) > 0 ? 1 : -1;
-        // let totalY = Math.abs(this.end.y - this.begin.y);
-        // let offsetY = (this.curTime / totalTime) * totalY * dirY;
-        // let positionY = this.begin.y + offsetY;
+        let dirY = (this.endY - this.beginY) > 0 ? 1 : -1;
+        let totalY = Math.abs(this.endY - this.beginY);
+        let offsetY = (this.curTime / totalTime) * totalY * dirY;
+        let positionY = this.beginY + offsetY;
+
         let position = this.node.getPosition();
-        this.node.setPosition(positionX, position.y, position.z);
+        this.node.setPosition(positionX, positionY, position.z);
 
         if (this.curTime >= totalTime) {
             this.callback(this.modelType, this.node);

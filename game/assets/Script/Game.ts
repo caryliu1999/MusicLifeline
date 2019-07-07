@@ -10,7 +10,7 @@
 
 import { _decorator, Component, EventTouch, CameraComponent, SphereColliderComponent} from "Cocos3D";
 import { MusicManager } from "./MusicManager";
-import { ModelType } from "./Enums";
+import { ModelType, GameState } from "./Enums";
 
 const { intersect } = cc.geometry;
 const { vec3 } = cc.vmath;
@@ -36,10 +36,15 @@ export class Game extends Component {
     @property(MusicManager)
     musicMgr = null;
 
+    @property
+    debug = 0;
+
     _touch = false;
 
     //_modelType = ModelType.SPHERE;
     _modelType = null;
+
+    time = 0;
 
     onLoad () {
         // mouse events included
@@ -83,10 +88,10 @@ export class Game extends Component {
     onStart () {
         const serverUrl = 'ws://127.0.0.1:8080';
 		const connection = new WebSocket(serverUrl);
-		connection.onmessage = () => {
+		connection.onmessage = (event: any) => {
 			// clap
-            console.log('clap');
-            this.dispatchMessage(Math.floor(Math.random() * 4), 0);
+            console.log('clap ++ ' + event.data);
+            this.dispatchMessage(parseInt(event.data), 0);
 		};
 		
 		connection.onopen = () => {
@@ -97,6 +102,26 @@ export class Game extends Component {
     }
 
     dispatchMessage (id, time) {
-        this.musicMgr.recordMsg(id, time);
+        if (id > 20) {
+            return
+        }
+        let index = id % 4;
+        if (index < 4 && index > 0) {
+            this.musicMgr.recordMsg(index, time);
+        }
+    }
+
+    update (dt) {
+        if (this.debug == 0 || this.musicMgr.state != GameState.PLAY) {
+            return
+        }
+
+        this.time += dt;
+        if (this.time < 0.2) return;
+        this.time = 0;
+        this.musicMgr.recordMsg(0, 0);
+        this.musicMgr.recordMsg(1, 0);
+        this.musicMgr.recordMsg(2, 0);
+        this.musicMgr.recordMsg(3, 0);
     }
 }

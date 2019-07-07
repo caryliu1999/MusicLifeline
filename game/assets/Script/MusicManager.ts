@@ -8,7 +8,7 @@
 //  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
 
-import { _decorator, Component, AudioSourceComponent } from "Cocos3D";
+import { _decorator, Component, AudioSourceComponent, LabelComponent } from "Cocos3D";
 import { beats2 as beats } from "./data";
 import { Pointer } from "./Pointer";
 import { Energy } from "./Energy";
@@ -46,6 +46,9 @@ export class MusicManager extends Component {
     @property
     beginX = 0;
 
+    @property(LabelComponent)
+    gameOverLab = null;
+
     state = GameState.STOP;
     musicData = [];
     musicIndex = 0;
@@ -55,8 +58,9 @@ export class MusicManager extends Component {
     pool = new cc.NodePool();
     modelPool = [];
     actorInputData = [];
-    mistake = 200; // 允许误差 400 ms
+    mistake = 260; // 允许误差 400 ms
     moveTime = 2000; // 移动时间 2s
+    pointerTime = 1000;
     matchIndex = 0;
     start () {
         // init pool
@@ -70,25 +74,38 @@ export class MusicManager extends Component {
         this.curTime = 0;
         this.musicData = beats;
         this.state = GameState.PLAY;
-
-        setTimeout(this.audio.play(), 2600);
+        this.gameOverLab.node.active = false;
+        setTimeout(this.audio.play(), this.pointerTime);
     }
 
     update (dt) {
+
         if (this.state != GameState.PLAY) {
             return;
         }
 
-        this.curTime += dt;
-        let tTime = this.musicData[this.musicIndex] / 1000;
-        if (this.curTime >= tTime - this.moveTime / 1000) {
+        this.curTime += dt * 1000;
+
+        let tTime = this.musicData[this.musicIndex];
+        if (this.curTime >= tTime - this.pointerTime) {
             this.musicIndex += 1;
             this.movePointer();
         }
 
         if (this.musicIndex >= this.musicData.length) {
             this.state = GameState.STOP;
+            this.gameOver(true);
         }
+    }
+
+    gameOver (isWin) {
+        if (isWin) {
+            this.gameOverLab.string = "CONGRATULATIONS"
+        } else {
+            this.gameOverLab.string = "GAME OVER"
+        }
+        
+        this.gameOverLab.node.active = true;
     }
 
     movePointer () {
@@ -101,7 +118,7 @@ export class MusicManager extends Component {
 
         this.pointerParent.addChild(pointer);
         let comp = pointer.getComponent(Pointer);
-        comp.reuse(this.begin.getPosition(), this.target.getPosition(), 1000, this.complete.bind(this));
+        comp.reuse(this.begin.getPosition(), this.target.getPosition(), this.pointerTime, this.complete.bind(this));
     }
 
     complete (node) {
@@ -124,8 +141,8 @@ export class MusicManager extends Component {
         if (this.matchIndex >= this.musicData.length) {
             return MatchState.FAIL;
         }
-        let matchTime = this.musicData[this.matchIndex] / 1000 - this.curTime;
-        let match = matchTime < (this.mistake / 1000) || matchTime > (this.mistake / 2000);
+        let matchTime = this.musicData[this.matchIndex] - this.curTime;
+        let match = matchTime < (this.mistake) && matchTime > - this.mistake / 2;
         return match ? MatchState.PERFECT : MatchState.FAIL;
     }
 

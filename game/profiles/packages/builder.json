@@ -1,0 +1,49 @@
+{
+  "buildTask": {
+    "web-desktop": {
+      "options": {
+        "buildPath": "./build",
+        "debug": false,
+        "embedWebDebugger": false,
+        "forceCombileEngine": false,
+        "inlineSpriteFrames": false,
+        "md5Cache": false,
+        "mergeStartScene": false,
+        "name": "game",
+        "platform": "web-desktop",
+        "resolution": {
+          "height": 960,
+          "width": 1280
+        },
+        "scenes": [
+          {
+            "url": "db://assets/Scene/Game.scene",
+            "uuid": "297ce4e8-9af5-4f36-b01a-596cc4b0eff6"
+          }
+        ],
+        "sourceMaps": false,
+        "startScene": "297ce4e8-9af5-4f36-b01a-596cc4b0eff6",
+        "taskName": "web-desktop",
+        "excludedModules": [],
+        "physics": "cannon",
+        "designResolution": {
+          "width": 960,
+          "height": 640,
+          "fitWidth": true,
+          "fitHeight": false
+        }
+      },
+      "rate": 100,
+      "state": "success",
+      "subTask": {
+        "engine": "success",
+        "settings": "success",
+        "template": "success"
+      },
+      "message": "build success in 42149 ms"
+    }
+  },
+  "platformQueue": {
+    "web-desktop": []
+  }
+}

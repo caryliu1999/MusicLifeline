@@ -1,0 +1,55 @@
+{
+  "ver": "1.0.14",
+  "importer": "image",
+  "imported": true,
+  "uuid": "360fb352-063d-4463-b639-37c521006ad6",
+  "displayName": "",
+  "files": [
+    ".png",
+    ".json"
+  ],
+  "subMetas": {
+    "spriteFrame": {
+      "ver": "1.0.2",
+      "importer": "sprite-frame",
+      "uuid": "360fb352-063d-4463-b639-37c521006ad6@spriteFrame",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {},
+      "userData": {
+        "wrapModeS": "repeat",
+        "wrapModeT": "repeat",
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "none",
+        "premultiplyAlpha": false,
+        "anisotropy": 1,
+        "trimType": "auto",
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 0,
+        "offsetY": -5.5,
+        "trimX": 31,
+        "trimY": 47,
+        "width": 342,
+        "height": 13,
+        "rawWidth": 404,
+        "rawHeight": 96,
+        "borderTop": 4,
+        "borderBottom": 4,
+        "borderLeft": 66,
+        "borderRight": 66,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "360fb352-063d-4463-b639-37c521006ad6",
+        "atlasUuid": ""
+      },
+      "displayName": "set-of-progress-bar"
+    }
+  },
+  "userData": {
+    "type": "sprite-frame",
+    "redirect": "360fb352-063d-4463-b639-37c521006ad6@spriteFrame"
+  }
+}

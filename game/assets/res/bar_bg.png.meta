@@ -1,0 +1,55 @@
+{
+  "ver": "1.0.14",
+  "importer": "image",
+  "imported": true,
+  "uuid": "dd02432a-37e4-44f5-8a4c-af1fe37d0d47",
+  "displayName": "",
+  "files": [
+    ".png",
+    ".json"
+  ],
+  "subMetas": {
+    "spriteFrame": {
+      "ver": "1.0.2",
+      "importer": "sprite-frame",
+      "uuid": "dd02432a-37e4-44f5-8a4c-af1fe37d0d47@spriteFrame",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {},
+      "userData": {
+        "wrapModeS": "repeat",
+        "wrapModeT": "repeat",
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "none",
+        "premultiplyAlpha": false,
+        "anisotropy": 1,
+        "trimType": "auto",
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 0,
+        "offsetY": -1,
+        "trimX": 12,
+        "trimY": 27,
+        "width": 304,
+        "height": 8,
+        "rawWidth": 328,
+        "rawHeight": 60,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "dd02432a-37e4-44f5-8a4c-af1fe37d0d47",
+        "atlasUuid": ""
+      },
+      "displayName": "bar_bg"
+    }
+  },
+  "userData": {
+    "type": "sprite-frame",
+    "redirect": "dd02432a-37e4-44f5-8a4c-af1fe37d0d47@spriteFrame"
+  }
+}
