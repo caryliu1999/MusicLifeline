@@ -15,6 +15,8 @@ var url = require('url');
 var path = require('path');
 var WebSocketServer = require('websocket').server;
 
+const server = process.argv[2] || '10.44.63.14'; // gets the first argument on cli
+
 var connectionArray = [];
 var nextID = Date.now();
 var thisId = 0;
@@ -121,8 +123,9 @@ httpServer.listen(8080, function() {
     console.log((new Date()) + " Server is listening on port 8080");
 });
 
+console.log('connect to', server);
 var kcp = require('node-kcp');
-var kcpobj = new kcp.KCP(123, {address: '10.44.63.17', port: 41234});
+var kcpobj = new kcp.KCP(123, {address: server, port: 41234});
 var dgram = require('dgram');
 var client = dgram.createSocket('udp4');
 var msg = 'hello world';
