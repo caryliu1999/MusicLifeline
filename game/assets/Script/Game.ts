@@ -8,7 +8,7 @@
 //  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
 
-import { _decorator, Component, EventTouch, CameraComponent, SphereColliderComponent} from "Cocos3D";
+import { _decorator, Component, EventTouch, CameraComponent, LabelComponent, SphereColliderComponent} from "Cocos3D";
 import { MusicManager } from "./MusicManager";
 import { ModelType, GameState } from "./Enums";
 
@@ -39,12 +39,19 @@ export class Game extends Component {
     @property
     debug = 0;
 
+    @property(LabelComponent)
+    connection = null;
+
     _touch = false;
 
     //_modelType = ModelType.SPHERE;
     _modelType = null;
 
     time = 0;
+
+    connectionNum = 0;
+
+    connections = {};
 
     vec3 = vec3.create(0, 0, 0);
 
@@ -90,21 +97,57 @@ export class Game extends Component {
 	onTouchEnd (e) {
 		this._touch = false;
     }
-    
-    onStart () {
+
+    start () {
         const serverUrl = 'ws://127.0.0.1:8080';
 		const connection = new WebSocket(serverUrl);
 		connection.onmessage = (event: any) => {
 			// clap
             //console.log('clap ++ ' + event.data);
-            this.dispatchMessage(parseInt(event.data), 0);
+            let i = event.data.split(event.data);
+            let id = i[0] || Math.floor(Math.random() * 4);
+            let have = this.connections[i];
+            if (!have) {
+                this.connections[i] = true;
+                this.connectionNum++;
+                this.connection.string = "connection: " + this.connectionNum;
+            }
+
+            this.dispatchMessage(parseInt(id), 0);
 		};
 		
 		connection.onopen = () => {
-            this.startNode.active = false;
-			this.musicMgr.play();
+            //this.startNode.active = false;
+			//this.musicMgr.play();
 		}
+    }
+    
+    onStart () {
+        // const serverUrl = 'ws://127.0.0.1:8080';
+		// const connection = new WebSocket(serverUrl);
+		// connection.onmessage = (event: any) => {
+		// 	// clap
+        //     //console.log('clap ++ ' + event.data);
+        //     let i = event.data.split(event.data);
+        //     let id = i[0] || Math.floor(Math.random() * 4);
+        //     let have = this.connections[i];
+        //     if (!have) {
+        //         this.connections[i] = true;
+        //         this.connectionNum++;
+        //         this.connection.string = "connection: " + this.connectionNum;
+        //     }
+
+        //     this.dispatchMessage(parseInt(id), 0);
+		// };
+		
+		// connection.onopen = () => {
+        //     this.startNode.active = false;
+		// 	this.musicMgr.play();
+		// }
         // game start
+
+        this.startNode.active = false;
+		this.musicMgr.play();
     }
 
     dispatchMessage (id, time) {
@@ -115,6 +158,14 @@ export class Game extends Component {
         if (index < 4 && index > 0) {
             this.musicMgr.recordMsg(index, time);
         }
+
+        if (this.connectionNum < 4) {
+            for (let i = 0; i < 4; i ++) {
+                if (i != index) {
+                    //this.musicMgr.recordMsg(i, time);
+                }
+            }
+        }
     }
 
     update (dt) {
@@ -123,7 +174,7 @@ export class Game extends Component {
         }
 
         this.time += dt;
-        if (this.time < 0.2) return;
+        if (this.time < 0.4) return;
         this.time = 0;
         this.musicMgr.recordMsg(0, 0);
         this.musicMgr.recordMsg(1, 0);

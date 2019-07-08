@@ -76,7 +76,7 @@ export class Actor extends Component {
     updateProgress () {
         //let cur = (this.node.getScale().x - this.minScale) / (this.maxScale - this.minScale);
         if (this.node.getScale().x <= this.minScale) {
-            this.musicMgr.gameOver(false);
+            //this.musicMgr.gameOver(false);
         }
         //this.progress.progress = cur;
     }

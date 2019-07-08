@@ -9,7 +9,7 @@
 //  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
 
 import { _decorator, Component, Enum, ColliderComponent, BoxColliderComponent, SphereColliderComponent, ModelComponent, Color } from "Cocos3D";
-import { ModelType } from "./Enums";
+import { ModelType, randomY } from "./Enums";
 import { Actor } from "./Actor";
 const { ccclass, property } = _decorator;
 
@@ -37,6 +37,7 @@ export class Energy extends Component {
 
     beginY = 0;
     endY = 0;
+
 
 
     onLoad () {
@@ -79,20 +80,30 @@ export class Energy extends Component {
         this.curTime = 0;
     }
 
-    reuse (begin, end, time: number = 1000, callback) {
+    reuse (begin, end, time: number = 1000, id, callback) {
         this.node.active = true;
         this.callback = callback;
         this.begin = begin;
         this.end = end;
         this.totalTime = time;
         this.curTime = 0;
+        this.setRandomY(id);
         this.move();
+    }
+
+    setRandomY(id) {
+        let position = this.node.getPosition();
+        this.beginY = position.y;
+        let data = randomY[id];
+        let ran = Math.random()
+        let endY = data.min * ran + data.max * (1 - ran);
+        this.endY = endY;
     }
 
     move () {
         let position = this.node.getPosition();
         this.beginY = position.y;
-        this.endY = Math.random() * 640;
+        //this.endY = Math.random() * 640;
         this.node.setPosition(this.begin, position.y, position.z);
         this.node.active = true;
     }

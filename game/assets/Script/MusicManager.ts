@@ -12,7 +12,7 @@ import { _decorator, Component, AudioSourceComponent, LabelComponent, ParticleSy
 import { beats2 as beats } from "./data";
 import { Pointer } from "./Pointer";
 import { Energy } from "./Energy";
-import { GameState , MatchState, ModelType} from "./Enums";
+import { GameState , MatchState, ModelType, randomY} from "./Enums";
 
 const { ccclass, property } = _decorator;
 
@@ -174,7 +174,8 @@ export class MusicManager extends Component {
         let layer = this.modelLayer[id];
         layer.addChild(model);
         let comp = model.getComponent(Energy);
-        comp.reuse(this.beginX, this.endX, this.moveTime, this.modelEnd.bind(this));
+
+        comp.reuse(this.beginX, this.endX, this.moveTime, id, this.modelEnd.bind(this));
     }
 
     modelEnd (modelType, node) {
